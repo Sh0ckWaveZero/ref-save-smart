@@ -1,4 +1,4 @@
-import type { Bank } from '~/interfaces/Bank';
+import { type Bank } from '~/interfaces/Bank';
 
 export const banks: Bank[] = [
   {
