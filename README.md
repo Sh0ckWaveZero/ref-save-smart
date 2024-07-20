@@ -1,29 +1,77 @@
-# Create T3 App
+# SaveSmart Rectjs.
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+SaveSmart เป็นเครื่องมือที่ช่วยให้คุณเพิ่มดอกเบี้ยเงินฝากให้สูงสุด โดยการกระจายเงินฝากของคุณไปยังบัญชีธนาคารต่างๆ ตามอัตราดอกเบี้ยและเงื่อนไขของแต่ละบัญชี ที่มาจาก [เนิร์ดไฟแนนซ์](https://www.facebook.com/photo/?fbid=122135196230270713&set=a.122105441570270713) และ โ[ค้ดต้นทาง](https://github.com/itoon/save-smart).
 
-## What's next? How do I make an app with this?
+![Flow chart by เนิร์ดไฟแนนซ์](https://github.com/itoon/save-smart/raw/main/public/other/flowchart.jpg)
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+```
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Setup
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+Make sure to install the dependencies:
 
-## Learn More
+```bash
+# npm
+npm install
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+# pnpm
+pnpm install
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+# yarn
+yarn install
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+# bun
+bun install
+```
 
-## How do I deploy this?
+## Development Server
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Start the development server on `http://localhost:3000`:
+
+```bash
+# npm
+npm run dev
+
+# pnpm
+pnpm run dev
+
+# yarn
+yarn dev
+
+# bun
+bun run dev
+```
+
+## Production
+
+Build the application for production:
+
+```bash
+# npm
+npm run build
+
+# pnpm
+pnpm run build
+
+# yarn
+yarn build
+
+# bun
+bun run build
+```
+
+Locally preview production build:
+
+```bash
+# npm
+npm run preview
+
+# pnpm
+pnpm run preview
+
+# yarn
+yarn preview
+
+# bun
+bun run preview
+```
