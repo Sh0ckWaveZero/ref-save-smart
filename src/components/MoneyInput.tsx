@@ -2,8 +2,8 @@
 import React from 'react'
 
 interface MoneyInputProps {
-  saving: string
-  setSaving: React.Dispatch<React.SetStateAction<string>>
+  saving: number
+  setSaving: React.Dispatch<React.SetStateAction<number>>
   canSavingMore2Years: boolean
   setCanSavingMore2Years: React.Dispatch<React.SetStateAction<boolean>>
   calculate: () => void
@@ -19,7 +19,7 @@ const MoneyInput = ({ saving, setSaving, canSavingMore2Years, setCanSavingMore2Y
           </label>
           <input
             value={saving}
-            onChange={(e) => setSaving(e.target.value)}
+            onChange={(e) => setSaving(e.target.valueAsNumber)}
             placeholder='100000'
             type='number'
             className='border border-[#DFDFDF] py-3 px-4 w-full focus:outline-none focus:border-[#2969FF] rounded-lg'

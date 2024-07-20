@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import BankItem from '~/components/BankItem'
 import Footer from '~/components/Footer'
@@ -9,33 +9,35 @@ import { banks } from '~/data/banks'
 import type { Bank } from '~/interfaces/Bank'
 import { formatCurrency } from '~/utils/formatCurrency'
 
+const initialBank: Bank[] = JSON.parse(JSON.stringify(banks)) as Bank[]
+
 const Home = () => {
-  const [saving, setSaving] = useState('0')
-  const [canSavingMore2Years, setCanSavingMore2Years] = useState(false)
-  const [isShowInput, setIsShowInput] = useState(true)
-  const [bankCalculator, setBankCalculator] = useState<Bank[]>(banks)
-  const [sumTotalInterest, setSumTotalInterest] = useState(0)
+  const [saving, setSaving] = useState<number>(0)
+  const [canSavingMore2Years, setCanSavingMore2Years] = useState<boolean>(false)
+  const [isShowInput, setIsShowInput] = useState<boolean>(true)
+  const [bankCalculator, setBankCalculator] = useState<Bank[]>(initialBank)
+  const [sumTotalInterest, setSumTotalInterest] = useState<number>(0)
 
-  const showInput = () => {
+  const resetBanksValue = useCallback(() => {
+    setBankCalculator(JSON.parse(JSON.stringify(initialBank)))
     setSumTotalInterest(0)
+  }, [])
+
+  // Calculate total interest for each bank
+  const calculateTotalInterest = useCallback((bank: Bank): number => {
+    return bank.saving * bank.interest
+  }, [])
+
+  // Show input and reset banks value
+  const showInput = useCallback(() => {
     setIsShowInput(true)
-  }
+    resetBanksValue()
+  }, [resetBanksValue])
 
-  const calculateSumTotalInterest = () => {
-    const totalInterest = bankCalculator.reduce((acc, bank) => acc + bank.totalInterest, 0)
-    setSumTotalInterest(totalInterest)
-  }
-
-  const calculateTotalInterest = (bank: (typeof banks)[0]) => bank.saving * bank.interest
-
-  const calculate = () => {
+  // Main calculation function
+  const calculate = useCallback(() => {
     setIsShowInput(false)
-    const updatedBankCalculator: any = bankCalculator.map((bank) => ({
-      ...bank,
-      saving: 0,
-      ratio: 0,
-      totalInterest: 0,
-    }))
+
     const saveDime = 10000
     const saveTTBME = 5833
     const saveKKP = 10000
@@ -45,117 +47,73 @@ const Home = () => {
     const saveAlpha = 500000
     const saveHL = 1000000
 
-    const updateBankCalculator = (index: number, amount: number) => {
-      updatedBankCalculator[index].saving += amount
-      updatedBankCalculator[index].ratio = (updatedBankCalculator[index].saving / Number(saving)) * 100
-      updatedBankCalculator[index].totalInterest = calculateTotalInterest(updatedBankCalculator[index])
-    }
+    let remainSaving = saving
+    const updatedBankCalculator = bankCalculator.map((bank, index) => {
+      if (remainSaving <= 0) return { ...bank, saving: 0, ratio: 0, totalInterest: 0 }
 
-    let remainSaving = Number(saving)
+      let allocation = 0
+      switch (index) {
+        case 0:
+          allocation = Math.min(remainSaving, saveDime)
+          break
+        case 1:
+          allocation = Math.min(remainSaving, saveTTBME)
+          break
+        case 2:
+          allocation = Math.min(remainSaving, saveKKP)
+          break
+        case 3:
+          allocation = Math.min(remainSaving, saveChillD)
+          break
+        case 4:
+          allocation = Math.min(remainSaving, saveTTBMEStep2)
+          break
+        case 5:
+          allocation = Math.min(remainSaving, saveKKPStep2)
+          break
+        case 6:
+          allocation = Math.min(remainSaving, saveAlpha)
+          break
+        case 7:
+          allocation = Math.min(remainSaving, saveHL)
+          break
+        case 8:
+          allocation = canSavingMore2Years ? Math.min(remainSaving, 971000) : Math.min(remainSaving, 385000)
+          break
+        case 9:
+          allocation = remainSaving
+          break
+        default:
+          allocation = 0
+      }
 
-    if (remainSaving < saveDime) {
-      updateBankCalculator(0, remainSaving)
-      calculateSumTotalInterest()
-      setBankCalculator(updatedBankCalculator)
-      return
-    }
+      remainSaving -= allocation
+      const ratio = (allocation / saving) * 100
+      const totalInterest = calculateTotalInterest({ ...bank, saving: allocation })
 
-    updateBankCalculator(0, saveDime)
-    remainSaving -= saveDime
+      return {
+        ...bank,
+        saving: allocation,
+        ratio,
+        totalInterest,
+      }
+    })
 
-    if (remainSaving < saveTTBME) {
-      updateBankCalculator(1, remainSaving)
-      calculateSumTotalInterest()
-      setBankCalculator(updatedBankCalculator)
-      return
-    }
-
-    updateBankCalculator(1, saveTTBME)
-    remainSaving -= saveTTBME
-
-    if (remainSaving < saveKKP) {
-      updateBankCalculator(2, remainSaving)
-      calculateSumTotalInterest()
-      setBankCalculator(updatedBankCalculator)
-      return
-    }
-
-    updateBankCalculator(2, saveKKP)
-    remainSaving -= saveKKP
-
-    if (remainSaving < saveChillD) {
-      updateBankCalculator(1, remainSaving)
-      calculateSumTotalInterest()
-      setBankCalculator(updatedBankCalculator)
-      return
-    }
-
-    updateBankCalculator(3, saveChillD)
-    remainSaving -= saveChillD
-
-    if (remainSaving < saveTTBMEStep2) {
-      updateBankCalculator(1, remainSaving)
-      calculateSumTotalInterest()
-      setBankCalculator(updatedBankCalculator)
-      return
-    }
-
-    updateBankCalculator(1, saveTTBMEStep2)
-    remainSaving -= saveTTBMEStep2
-
-    if (remainSaving < saveKKPStep2) {
-      updateBankCalculator(2, remainSaving)
-      calculateSumTotalInterest()
-      setBankCalculator(updatedBankCalculator)
-      return
-    }
-
-    updateBankCalculator(2, saveKKPStep2)
-    remainSaving -= saveKKPStep2
-
-    if (remainSaving < saveAlpha) {
-      updateBankCalculator(5, remainSaving)
-      calculateSumTotalInterest()
-      setBankCalculator(updatedBankCalculator)
-      return
-    }
-
-    updateBankCalculator(5, saveAlpha)
-    remainSaving -= saveAlpha
-
-    if (remainSaving < 971000 && canSavingMore2Years) {
-      updateBankCalculator(6, remainSaving)
-      calculateSumTotalInterest()
-      setBankCalculator(updatedBankCalculator)
-      return
-    }
-
-    if (remainSaving > saveHL) {
-      updateBankCalculator(7, saveHL)
-      remainSaving -= saveHL
-    } else {
-      updateBankCalculator(7, remainSaving)
-      calculateSumTotalInterest()
-      setBankCalculator(updatedBankCalculator)
-      return
-    }
-
-    if (canSavingMore2Years) {
-      updateBankCalculator(6, remainSaving)
-      calculateSumTotalInterest()
-      setBankCalculator(updatedBankCalculator)
-      return
-    }
-
-    if (remainSaving < 385000) {
-      updateBankCalculator(8, remainSaving)
-    } else {
-      updateBankCalculator(9, remainSaving)
-    }
-
-    calculateSumTotalInterest()
+    // Update bank calculator and then calculate total interest
     setBankCalculator(updatedBankCalculator)
-  }
+  }, [saving, bankCalculator, canSavingMore2Years, calculateTotalInterest])
+
+  const calculateSumTotalInterest = useCallback(() => {
+    // Calculate the total interest across all banks
+    const totalInterest = bankCalculator.reduce((acc, bank) => acc + bank.totalInterest, 0)
+    // Update the state with the total interest
+    setSumTotalInterest(totalInterest)
+  }, [bankCalculator])
+
+  // Effect to calculate sum total interest after bankCalculator updates
+  useEffect(() => {
+    calculateSumTotalInterest()
+  }, [bankCalculator, calculateSumTotalInterest])
 
   return (
     <>
@@ -175,7 +133,7 @@ const Home = () => {
             calculate={calculate}
           />
         ) : (
-          <ResultDisplay saving={saving} canSavingMore2Years={canSavingMore2Years} isShowInput={isShowInput} onShowInput={showInput} />
+          <ResultDisplay saving={saving} canSavingMore2Years={canSavingMore2Years} onShowInput={showInput} />
         )}
         <div className='container px-4 mx-auto'>
           <div className='mb-2'>
@@ -187,7 +145,7 @@ const Home = () => {
           </div>
           <div className='flex flex-col gap-2'>
             {bankCalculator.map((summary, index) => (
-              <BankItem bankCalculator={bankCalculator} key={index} index={index} summary={summary} isShowInput={isShowInput} />
+              <BankItem key={index} index={index} summary={summary} isShowInput={isShowInput} />
             ))}
           </div>
         </div>

@@ -2,13 +2,12 @@
 import React from 'react'
 
 type ResultDisplayProps = {
-  saving: string
+  saving: number
   canSavingMore2Years: boolean
-  isShowInput: boolean
   onShowInput: () => void
 }
 
-const ResultDisplay = ({ saving, canSavingMore2Years, isShowInput, onShowInput }: ResultDisplayProps) => {
+const ResultDisplay = ({ saving, canSavingMore2Years, onShowInput }: ResultDisplayProps) => {
   return (
     <div className='container px-4 mx-auto'>
       <div className='bg-white rounded-lg -mt-20 p-4 flex flex-col gap-4 border border-[#EDEDED]'>
