@@ -2,7 +2,7 @@
 import React from 'react'
 
 type ResultDisplayProps = {
-  saving: number
+  saving: string
   canSavingMore2Years: boolean
   isShowInput: boolean
   onShowInput: () => void
@@ -18,7 +18,7 @@ const ResultDisplay = ({ saving, canSavingMore2Years, isShowInput, onShowInput }
             {new Intl.NumberFormat('th-TH', {
               style: 'currency',
               currency: 'THB',
-            }).format(saving)}
+            }).format(Number(saving))}
           </h2>
         </div>
         <p className={`text-center ${!canSavingMore2Years ? 'block' : 'hidden'}`}>ฝากสั้น ไม่ถึง 2 ปี</p>

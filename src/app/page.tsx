@@ -10,7 +10,7 @@ import type { Bank } from '~/interfaces/Bank'
 import { formatCurrency } from '~/utils/formatCurrency'
 
 const Home = () => {
-  const [saving, setSaving] = useState(0)
+  const [saving, setSaving] = useState('0')
   const [canSavingMore2Years, setCanSavingMore2Years] = useState(false)
   const [isShowInput, setIsShowInput] = useState(true)
   const [bankCalculator, setBankCalculator] = useState<Bank[]>(banks)
@@ -47,11 +47,11 @@ const Home = () => {
 
     const updateBankCalculator = (index: number, amount: number) => {
       updatedBankCalculator[index].saving += amount
-      updatedBankCalculator[index].ratio = (updatedBankCalculator[index].saving / saving) * 100
+      updatedBankCalculator[index].ratio = (updatedBankCalculator[index].saving / Number(saving)) * 100
       updatedBankCalculator[index].totalInterest = calculateTotalInterest(updatedBankCalculator[index])
     }
 
-    let remainSaving = saving
+    let remainSaving = Number(saving)
 
     if (remainSaving < saveDime) {
       updateBankCalculator(0, remainSaving)
