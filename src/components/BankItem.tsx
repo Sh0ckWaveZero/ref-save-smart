@@ -1,5 +1,5 @@
 import React from 'react'
-import type { Bank } from '~/interfaces/Bank'
+import { type Bank } from '~/interfaces/Bank'
 import Image from 'next/image'
 
 interface BankItemProps {

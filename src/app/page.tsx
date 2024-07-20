@@ -6,7 +6,7 @@ import Footer from '~/components/Footer'
 import MoneyInput from '~/components/MoneyInput'
 import ResultDisplay from '~/components/ResultDisplay'
 import { banks } from '~/data/banks'
-import type { Bank } from '~/interfaces/Bank'
+import { type Bank } from '~/interfaces/Bank'
 import { formatCurrency } from '~/utils/formatCurrency'
 
 const initialBank: Bank[] = JSON.parse(JSON.stringify(banks)) as Bank[]
