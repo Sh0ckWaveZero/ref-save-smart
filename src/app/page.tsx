@@ -6,7 +6,7 @@ import Footer from '~/components/Footer'
 import MoneyInput from '~/components/MoneyInput'
 import ResultDisplay from '~/components/ResultDisplay'
 import { banks } from '~/data/banks'
-import { Bank } from '~/interfaces/Bank'
+import type { Bank } from '~/interfaces/Bank'
 import { formatCurrency } from '~/utils/formatCurrency'
 
 const Home = () => {
@@ -31,7 +31,7 @@ const Home = () => {
 
   const calculate = () => {
     setIsShowInput(false)
-    let updatedBankCalculator: any = bankCalculator.map((bank) => ({
+    const updatedBankCalculator: any = bankCalculator.map((bank) => ({
       ...bank,
       saving: 0,
       ratio: 0,

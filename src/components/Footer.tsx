@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import styles from '~/app/index.module.css'
+import Image from 'next/image'
 
 const Footer = () => {
   return (
@@ -8,7 +8,7 @@ const Footer = () => {
       <div>
         <p className='text-xs'>Developed By:</p>
         <a href='https://github.com/Sh0ckWaveZero' target='_blank' className='flex justify-center gap-1'>
-          <img src='https://avatars.githubusercontent.com/u/14287362?v=4' className='w-6 h-6 rounded-full' />
+          <Image src='https://avatars.githubusercontent.com/u/14287362?v=4' alt='Avatar' width={24} height={24} className='rounded-full' />
           <p className='font-bold'>Midseelee</p>
         </a>
       </div>

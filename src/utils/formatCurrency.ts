@@ -1,4 +1,4 @@
-export const formatCurrency = (value: number, locale: string = 'th-TH', currency: string = 'THB') => {
+export const formatCurrency = (value: number, locale = 'th-TH', currency = 'THB') => {
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: currency,
