@@ -16,8 +16,8 @@ const notoSansThai = Noto_Sans_Thai({
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang='en' suppressHydrationWarning={true}>
-      <body className={notoSansThai.className}>{children}</body>
+    <html lang='en'>
+      <body className={notoSansThai.className} suppressHydrationWarning={true}>{children}</body>
     </html>
   )
 }

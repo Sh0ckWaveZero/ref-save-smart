@@ -17,9 +17,8 @@ const Home = () => {
   const [sumTotalInterest, setSumTotalInterest] = useState(0)
 
   const showInput = () => {
-    setIsShowInput(true)
-    setBankCalculator(banks)
     setSumTotalInterest(0)
+    setIsShowInput(true)
   }
 
   const calculateSumTotalInterest = () => {
