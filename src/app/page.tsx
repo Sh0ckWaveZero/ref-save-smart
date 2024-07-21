@@ -7,7 +7,7 @@ import MoneyInput from '~/components/MoneyInput'
 import ResultDisplay from '~/components/ResultDisplay'
 import { banks } from '~/data/banks'
 import { type Bank } from '~/interfaces/Bank'
-import { formatCurrency } from '~/utils/formatCurrency'
+import { calculatePercentage, formatCurrency } from '~/utils/formatCurrency'
 
 const initialBank: Bank[] = JSON.parse(JSON.stringify(banks)) as Bank[]
 
@@ -115,11 +115,13 @@ const Home = () => {
     calculateSumTotalInterest()
   }, [bankCalculator, calculateSumTotalInterest])
 
+  const interestPercentage = calculatePercentage(saving, sumTotalInterest)
+
   return (
     <>
       <div className='bg-[#2969FF] h-52'>
         <div className='flex flex-col gap-1 py-4 pt-10 text-center text-white'>
-          <h1 className='text-2xl font-bold'>ฝากเงินที่ไหนดี ?</h1>
+          <h1 className='text-2xl font-bold'>ฝากเงินที่ไหน ?</h1>
           <p className='text-sm'>มิดซีลี x MSL</p>
         </div>
       </div>
@@ -135,33 +137,46 @@ const Home = () => {
         ) : (
           <ResultDisplay saving={saving} canSavingMore2Years={canSavingMore2Years} onShowInput={showInput} />
         )}
-        <div className='container px-4 mx-auto'>
+        {!isShowInput && (
+          <div className='container px-4 mx-auto'>
+            <div className='mb-2'>
+              <h2 className='text-lg font-bold'>ดอกเบี้ยรวมโดยประมาณ (หากฝากเงิน 1 ปี)</h2>
+            </div>
+            <div className='border border-[#DFDFDF] p-4 bg-white rounded-lg flex gap-3'>
+              <div className='flex justify-between flex-1'>
+                <div className='flex flex-col gap-0.5'>
+                  <div className='flex items-center gap-1 text-sm'>
+                    <p className='text-sm font-bold'>ดอกเบี้ยรวมทุกธนาคาร</p>
+                    {!isShowInput && <span className='p-0.5 px-1 rounded-lg text-[10px] font-bold bg-green-300'>{interestPercentage}</span>}
+                  </div>
+                  {sumTotalInterest > 20000 && (
+                    <>
+                      <p className='text-[#A1A1A1] text-xs'>หัก ภาษี 15% (ดอกเบี้ยเกิน ฿20,000)</p>
+                      <p className='text-[#A1A1A1] text-xs'>ดอกเบี้ยหลังหักภาษี</p>
+                    </>
+                  )}
+                </div>
+                <div className='flex flex-col gap-0.5'>
+                  <p className='text-sm font-bold text-right'>{formatCurrency(sumTotalInterest)}</p>
+                  {sumTotalInterest > 20000 && (
+                    <>
+                      <p className='text-right text-xs text-[#A1A1A1]'>{formatCurrency(sumTotalInterest * 0.15)}</p>
+                      <p className='text-right text-xs text-[#A1A1A1]'>{formatCurrency(sumTotalInterest - sumTotalInterest * 0.15)}</p>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        <div className='container px-4 pb-4 mx-auto'>
           <div className='mb-2'>
             <h2 className='text-lg font-bold'>ฝากที่ไหนบ้าง</h2>
-            <div className='text-xs text-[#A1A1A1] bg-[#f5f5f5] p-2 rounded-lg'>
-              <p>Disclaimer</p>
-              <p className='text-red-300'>***ข้อมูลที่ได้รับมาจากการคำนวณเป็นเพียงการประมาณการเท่านั้น ***</p>
-            </div>
           </div>
           <div className='flex flex-col gap-2'>
             {bankCalculator.map((summary, index) => (
               <BankItem key={index} index={index} summary={summary} isShowInput={isShowInput} />
             ))}
-          </div>
-        </div>
-        <div className='container px-4 pb-4 mx-auto'>
-          <h2 className='mb-1 text-lg font-bold'>ดอกเบี้ยที่จะได้รับโดยประมาณ</h2>
-          <div className='border border-[#DFDFDF] p-4 bg-white rounded-lg flex gap-3'>
-            <div className='flex justify-between flex-1'>
-              <div className='flex flex-col gap-0.5'>
-                <p className='text-sm font-bold'>ดอกเบี้ยรวมทุกธนาคาร</p>
-                <p className='text-[#A1A1A1] text-xs'>ดอกเบี้ยรวมทุกธนาคารหากฝากเงิน 1 ปี</p>
-              </div>
-              <div className='flex flex-col gap-0.5'>
-                <p className='text-sm font-bold text-right'>{formatCurrency(sumTotalInterest)}</p>
-                <p className='text-[#A1A1A1] text-xs text-right'></p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

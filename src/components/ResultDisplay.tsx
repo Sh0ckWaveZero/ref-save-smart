@@ -1,5 +1,6 @@
 'use client'
 import React from 'react'
+import { formatCurrency } from '~/utils/formatCurrency'
 
 type ResultDisplayProps = {
   saving: number
@@ -13,12 +14,7 @@ const ResultDisplay = ({ saving, canSavingMore2Years, onShowInput }: ResultDispl
       <div className='bg-white rounded-lg -mt-20 p-4 flex flex-col gap-4 border border-[#EDEDED]'>
         <div className='flex flex-col gap-1'>
           <label className='text-[#A1A1A1] text-center'>จำนวนเงินออม</label>
-          <h2 className='text-4xl font-bold text-center'>
-            {new Intl.NumberFormat('th-TH', {
-              style: 'currency',
-              currency: 'THB',
-            }).format(Number(saving))}
-          </h2>
+          <h2 className='text-4xl font-bold text-center'>{formatCurrency(Number(saving))}</h2>
         </div>
         <p className={`text-center ${!canSavingMore2Years ? 'block' : 'hidden'}`}>ฝากสั้น ไม่ถึง 2 ปี</p>
         <p className={`text-center ${canSavingMore2Years ? 'block' : 'hidden'}`}>ฝากยาว มากกว่า 2 ปี</p>

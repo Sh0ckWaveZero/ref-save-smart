@@ -1,6 +1,7 @@
 import React from 'react'
 import { type Bank } from '~/interfaces/Bank'
 import Image from 'next/image'
+import { formatCurrency } from '~/utils/formatCurrency'
 
 interface BankItemProps {
   index: number
@@ -29,20 +30,9 @@ const BankItem: React.FC<BankItemProps> = ({ index, summary, isShowInput }) => {
           <p className='text-[#A1A1A1] text-xs'>{summary.bank}</p>
         </div>
         <div className='flex flex-col gap-0.5'>
-          <p className='text-sm font-bold text-right'>
-            {new Intl.NumberFormat('th-TH', {
-              style: 'currency',
-              currency: 'THB',
-            }).format(summary.saving)}
-          </p>
+          <p className='text-sm font-bold text-right'>{formatCurrency(summary.saving)}</p>
           <p className='text-[#A1A1A1] text-xs text-right'>
-            <span>
-              ดอกเบี้ย{' '}
-              {new Intl.NumberFormat('th-TH', {
-                style: 'currency',
-                currency: 'THB',
-              }).format(summary.totalInterest)}
-            </span>
+            <span>ดอกเบี้ย {formatCurrency(summary.totalInterest)}</span>
           </p>
         </div>
       </div>
